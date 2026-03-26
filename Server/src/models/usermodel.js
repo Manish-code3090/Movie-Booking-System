@@ -1,15 +1,51 @@
-import mongoose, { Types } from "mongoose";
-const user_schima = new mongoose.Schema({
+import mongoose from "mongoose";
+
+const userShowSchema = new mongoose.Schema({
+  showId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Show"
+  },
+  showTime: Date,
+  showName: String,
+  hallId: String,
+  hallLocation: {
+    latitude: Number,
+    longitude: Number,
+    description :String,
+  }
+});
+
+const userSchima = new mongoose.Schema({
     username : {
        type : String,
-       require : true
+       required : true
     }, 
-    email : {
-        type : String,
-        require : true,
-    },
+    email: {
+  type: String,
+  required: true,
+  unique: true
+},
     password : {
         type : String, 
-        require : true
-    } 
+        required : true
+    },
+    location: {
+  type: {
+    type: String,
+    enum: ["Point"],
+    default: "Point"
+  },
+  coordinates: {
+    type: [Number] // [longitude, latitude]
+  }
+}, 
+    shows : [userShowSchema],
+    otp : {
+        otp : Number,
+        date : Date,
+        is_valid: {
+  type: Boolean,
+  default: false
+}
+    }
 })
