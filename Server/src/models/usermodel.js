@@ -5,14 +5,10 @@ const userShowSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Show"
   },
+  bookingId : ObjectId,
   showTime: Date,
   showName: String,
-  hallId: String,
-  hallLocation: {
-    latitude: Number,
-    longitude: Number,
-    description :String,
-  }
+  status : "upcoming" | "expires", 
 });
 
 const userSchima = new mongoose.Schema({
