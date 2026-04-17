@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const screenSchema = new mongoose.Schema({
-  theatreId: ObjectId,
+  theatreId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Theatre"
+  },
 
   name: String, // Screen 1, Audi 2
 
@@ -9,9 +12,12 @@ const screenSchema = new mongoose.Schema({
 
   seatLayout: [
     {
-      row: "A",
-      seats: ["A1", "A2", "A3"],
-      category: "Gold"
+      row: String,
+      seats: [String],
+      category: String
     }
   ]
-})
+});
+
+const Screen = mongoose.model("Screen", screenSchema);
+export default Screen;

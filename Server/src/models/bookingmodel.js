@@ -1,8 +1,14 @@
 import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema({
-  userId: ObjectId,
-  showId: ObjectId,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  showId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Show"
+  },
 
   seats: [String],
 
@@ -10,7 +16,17 @@ const bookingSchema = new mongoose.Schema({
 
   paymentId: String,
 
-  status: "pending" | "confirmed" | "cancelled",
+  status: {
+    type: String,
+    enum: ["pending", "confirmed", "cancelled"],
+    default: "pending"
+  },
 
-  createdAt: Date
-})
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Booking = mongoose.model("Booking", bookingSchema);
+export default Booking;

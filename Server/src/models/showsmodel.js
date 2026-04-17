@@ -1,10 +1,18 @@
 import mongoose from "mongoose";
 
-// need to change this 
 const showsSchema = new mongoose.Schema({
-  movieId: ObjectId,
-  theatreId: ObjectId,
-  screenId: ObjectId,
+  movieId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Movie"
+  },
+  theatreId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Theatre"
+  },
+  screenId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Screen"
+  },
 
   startTime: Date,
   endTime: Date,
@@ -33,6 +41,11 @@ const showsSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    default : "active" | "cancelled" | "housefull"
+    enum: ["active", "cancelled", "housefull"],
+    default: "active"
   }
-})
+});
+
+const Show = mongoose.model('Show', showsSchema);
+
+export default Show;

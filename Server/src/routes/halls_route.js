@@ -1,6 +1,0 @@
-import express from "express"
-
-const hall_router = express.Router();
-// routes
-
-export default hall_router;

@@ -1,7 +1,6 @@
-import mongoose  from "mongoose";
+import mongoose from "mongoose";
 
 const theaterSchema = new mongoose.Schema({
-
   name: String,
   address: String,
   city: String,
@@ -14,5 +13,7 @@ const theaterSchema = new mongoose.Schema({
     },
     coordinates: [Number]
   }
-  
-})
+});
+
+const Theatre = mongoose.model("Theatre", theaterSchema);
+export default Theatre;

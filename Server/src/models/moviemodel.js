@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
-const movieSchima = new mongoose.Schema({
-
+const movieSchema = new mongoose.Schema({
   title: String,
   description: String,
   duration: Number, // minutes
@@ -9,9 +8,16 @@ const movieSchima = new mongoose.Schema({
   genre: [String],
   releaseDate: Date,
 
-  formats: ["2D", "3D", "IMAX"],
+  formats: [
+    {
+      type: String,
+      enum: ["2D", "3D", "IMAX"]
+    }
+  ],
 
   posterUrl: String,
   trailerUrl: String
-  
-})
+});
+
+const Movie = mongoose.model("Movie", movieSchema);
+export default Movie;

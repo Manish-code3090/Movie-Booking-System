@@ -1,17 +1,24 @@
 import mongoose from "mongoose";
 
-const userShowSchema = new mongoose.Schema({
+const userShowSchema = new mongoose.Schema(
+  {
   showId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Show"
   },
-  bookingId : ObjectId,
+  bookingId :{
+    type: mongoose.Schema.Types.ObjectId
+  },
   showTime: Date,
   showName: String,
-  status : "upcoming" | "expires", 
-});
+ status: {
+  type: String,
+  enum: ["upcoming", "expired"]
+}
+}
+);
 
-const userSchima = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     username : {
        type : String,
        required : true
@@ -45,3 +52,6 @@ const userSchima = new mongoose.Schema({
 }
     }
 })
+
+const User = mongoose.model('User', userSchema);
+export default User;
