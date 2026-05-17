@@ -8,6 +8,7 @@ const userShowSchema = new mongoose.Schema(
   },
   bookingId :{
     type: mongoose.Schema.Types.ObjectId
+    
   },
   showTime: Date,
   showName: String,
@@ -28,7 +29,7 @@ const userSchema = new mongoose.Schema({
   required: true,
   unique: true
 },
-    password : {
+    hash_password : {
         type : String, 
         required : true
     },
