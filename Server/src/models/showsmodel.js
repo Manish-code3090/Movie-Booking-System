@@ -30,14 +30,7 @@ const showsSchema = new mongoose.Schema({
   totalSeats: Number,
   availableSeats: Number,
 
-  location: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      default: "Point"
-    },
-    coordinates: [Number]
-  },
+ 
 
   status: {
     type: String,

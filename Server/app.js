@@ -1,10 +1,11 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import auth_router from "./src/routes/auth_route.js"
-import movie_router from "./src/routes/movie_route.js"
-import show_route from './src/routes/shows_route.js'
-import booking_route from './src/routes/booking_route.js'
+import auth_router from "./src/routes/auth.router.js"
+import movie_router from "./src/routes/movie.router.js"
+import show_route from './src/routes/shows.router.js'
+import booking_route from './src/routes/booking.router.js'
+import errorMiddleware from "./src/middlewares/error.middleware.js"
 
 const app = express()
 app.use(express.json())
@@ -14,6 +15,6 @@ app.use('/api/show', show_route)
 app.use('/api/show', booking_route)
 app.use('/api/auth' , auth_router)
 app.use('/api/movie', movie_router)
-
+app.use(errorMiddleware);
 export default app
  

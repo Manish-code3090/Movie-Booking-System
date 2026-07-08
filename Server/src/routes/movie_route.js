@@ -1,6 +1,0 @@
-import express from "express";
-
-const movie_router = express.Router()
-// routes
-
-export default movie_router

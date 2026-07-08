@@ -3,15 +3,16 @@ import jwt from "jsonwebtoken";
 import User from "../models/usermodel.js";
 import refreshTokenModel from "../models/refreshToken.js";
 import { creatJti, encryptToken, rotateRefreshToken, signAccessToken, signRefreshToken, createRefreshToken, setRefreshCookie } from "../util/auth.js";
+import asyncHandler from "../util/asyncHandler.util.js";
+import apiError from "../util/error.util.js";
 
 // register function 
-export const register = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
+export const register = asyncHandler(async (req, res) => {
+   const { username, email, password } = req.body;
     if (username && email && password) {
       const existingUser = await User.findOne({ email });
       if (existingUser) {
-        return res.status(400).json({ message: "User allredy exist" });
+        throw new apiError("User already exists", 400);
       }
       const hash = await bcrypt.hash(password, 10);
       const newUser = new User({
@@ -21,7 +22,7 @@ export const register = async (req, res) => {
       });
       const user = await newUser.save();
       if (!user) {
-        return res.status(500).json({ message: "Unable to save user" });
+        throw new apiError("Unable to save user", 500);
       }
       console.log("User successfully created", user);
       return res.status(201).json({
@@ -29,19 +30,15 @@ export const register = async (req, res) => {
         user : {username, email},
       });
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+});
 
 // login function 
-export const login = async (req, res) => {
- try {
-   const {username, email, password} = req.body;
+export const login = asyncHandler(async (req, res) => {
+  const {username, email, password} = req.body;
    // finding user with email and username
   const user = await User.findOne({ email , username })
   if(!user){
-    return res.status(404).json({ message : "wrong credintial"});
+    throw new apiError("Wrong credentials", 404);
   } 
     const match = await bcrypt.compare(password, user.hash_password)
 
@@ -56,30 +53,34 @@ setRefreshCookie(res, refreshToken);
 return res.status(200).json({ message : "Login successfull", ascessToken }); 
     }
     // if credintial is wrong then send error message
-    return res.status(404).json({ message : "wrong credintial"});
- } catch (error) {
-  console.log(error);
-   return res.status(500).json({ message: 'Server error' });
-  
- }
-}
+    throw new apiError("Wrong credentials", 404);
+})
   
 
-export const refreshAscessToken = async (req, res) => {
-  try{
+export const refreshAscessToken = asyncHandler(async (req, res) => {
 const { refreshToken } = req.cookies;
-if(!refreshToken) return res.status(401).json({ message: 'Unauthorized' });
+if(!refreshToken) throw new apiError("Unauthorized", 404);
 const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
 const tokenHash = encryptToken(refreshToken);
 const existingToken = await refreshTokenModel.findOne({ tokenHash,jti: decoded.jti }).populate('user');
 if(!existingToken || existingToken.revokedAt || existingToken.expiresAt < new Date()){
-  return res.status(401).json({ message: 'Unauthorized as existiong token have issue' });
+  throw new apiError("Unauthorized", 401);
 }
 const newAscessToken = await rotateRefreshToken(existingToken, existingToken.user, req,res);
 return res.status(200).json({ ascessToken : newAscessToken });
-  }catch(error){
-    console.log(error);
-    return res.status(500).json({ message: 'Server error' });
-  }
-}
+})
+
+export const Logout = asyncHandler(async (req, res) =>{
+  const token = req.cookies?.refresh_token;
+    if (token) {
+      const tokenHash = hashToken(token);
+      const doc = await RefreshToken.findOne({ tokenHash });
+      if (doc && !doc.revokedAt) {
+        doc.revokedAt = new Date();
+        await doc.save();
+      }
+    }
+    res.clearCookie('refresh_token', { path: '/api/auth/refresh' });
+    res.json({ message: 'Logged out' });
+})
 
