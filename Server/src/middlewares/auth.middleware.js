@@ -11,7 +11,7 @@ export const verifyToken = (req, res, next) => {
     }   
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-         req.user = { id: decoded.id, email: decoded.email, username: decoded.username };
+         req.user = decoded;
         next();
     } catch (error) {
         throw new apiError("Invalid token", 401);

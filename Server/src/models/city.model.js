@@ -20,4 +20,5 @@ const citySchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model("City", citySchema);  
+const City = mongoose.model("City", citySchema);  
+export default City;

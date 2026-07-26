@@ -44,5 +44,40 @@ const createMovie = asyncHandler(async (req, res) => {
   res.status(201).json({"movie has been created":createdMovie._id});
 });
 
+const updateMovie = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const movieData = req.body;
+  const movie = await Movie.findByIdAndUpdate(id, movieData, { new: true });
+  if (!movie) {
+    throw new apiError("Movie not found", 404);
+  }
+  res.json(movie);
+});
 
-export { getAllMovies, getMovieById, createMovie };
+const editMoviePoster = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const posterPath = req.file ? req.file.path : null;
+  if (!posterPath) {
+    throw new apiError("Poster image is required", 400);
+  }
+  const posterUploadResult = await uploadImage(posterPath);
+  if(!posterUploadResult || !posterUploadResult.secure_url) {
+    throw new apiError("Failed to upload poster image", 500);
+  }
+  const movie = await Movie.findByIdAndUpdate(id, { posterUrl: posterUploadResult.secure_url }, { new: true });
+  if (!movie) {
+    throw new apiError("Movie not found", 404);
+  }
+  res.json(movie);
+});
+
+const deleteMovie = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const movie = await Movie.findByIdAndDelete(id);
+  if (!movie) {
+    throw new apiError("Movie not found", 404);
+  }
+  res.json({"message": "Movie deleted successfully"});
+});
+
+export { getAllMovies, getMovieById, createMovie, updateMovie, editMoviePoster, deleteMovie };

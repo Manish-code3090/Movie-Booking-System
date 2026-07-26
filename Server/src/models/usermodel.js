@@ -1,24 +1,5 @@
 import mongoose from "mongoose";
 
-const userShowSchema = new mongoose.Schema(
-  {
-  showId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Show"
-  },
-  bookingId :{
-    type: mongoose.Schema.Types.ObjectId
-    
-  },
-  showTime: Date,
-  showName: String,
- status: {
-  type: String,
-  enum: ["upcoming", "expired"]
-}
-}
-);
-
 const userSchema = new mongoose.Schema({
     username : {
        type : String,
@@ -36,14 +17,9 @@ const userSchema = new mongoose.Schema({
     location: {
   type: {
     type: String,
-    enum: ["Point"],
-    default: "Point"
+    ref: "City"
   },
-  coordinates: {
-    type: [Number] // [longitude, latitude]
-  }
 }, 
-    shows : [userShowSchema],
     otp : {
         otp : Number,
         date : Date,
@@ -51,6 +27,16 @@ const userSchema = new mongoose.Schema({
   type: Boolean,
   default: false
 }
+    },
+    role: {
+        type: String,
+        enum: [
+            "CUSTOMER",
+            "THEATRE_OWNER",
+            "ADMIN",
+            "SUPER_ADMIN"
+        ],
+        default: "CUSTOMER"
     }
 })
 

@@ -1,6 +1,7 @@
 import express from "express";
 import { getAllMovies, getMovieById, createMovie } from "../controller/movie.controller.js";
 import multer from "../middlewares/multer.middleware.js"
+import authMiddleware from "../middlewares/auth.middleware.js";
 const movie_router = express.Router()
 
 movie_router.get("/", getAllMovies);
