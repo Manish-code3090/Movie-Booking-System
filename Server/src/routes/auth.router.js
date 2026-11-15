@@ -1,12 +1,12 @@
 import express from "express"
 import {register,login, refreshAscessToken, Logout} from '../controller/auth.controller.js'
-
+import authMiddleware from "../middlewares/auth.middleware.js";
 const auth_router = express.Router();
 // routes
 auth_router.post('/register', register)
 auth_router.post('/login', login)
 auth_router.post('/refresh-token', refreshAscessToken)
-auth_router.post('/logout', Logout)
+auth_router.post('/logout', authMiddleware, Logout)
 
 
 export default auth_router
