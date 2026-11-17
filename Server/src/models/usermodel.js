@@ -31,12 +31,12 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: [
-            "CUSTOMER",
+            "USER",
             "THEATRE_OWNER",
             "ADMIN",
             "SUPER_ADMIN"
         ],
-        default: "CUSTOMER"
+        default: "USER"
     }
 })
 
