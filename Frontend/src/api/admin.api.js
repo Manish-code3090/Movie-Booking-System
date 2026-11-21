@@ -1,4 +1,4 @@
-import api from './axios.js'
+import {api} from './axios.js'
 
 export const getPendingOwners = async () => {
   const { data } = await api.get('/admin/owners', { params: { status: 'pending' } })

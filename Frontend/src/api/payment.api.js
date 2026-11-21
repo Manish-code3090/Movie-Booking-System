@@ -1,4 +1,4 @@
-import api from './axios.js'
+import {api} from './axios.js'
 
 export const createPaymentIntent = async ({ bookingId, method }) => {
   const { data } = await api.post('/payments/intent', { bookingId, method })

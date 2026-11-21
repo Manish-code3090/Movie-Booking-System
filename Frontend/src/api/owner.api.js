@@ -1,4 +1,4 @@
-import api from './axios.js'
+import {api} from './axios.js'
 
 export const registerTheatre = async (theatre) => {
   const { data } = await api.post('/owner/theatres', theatre)

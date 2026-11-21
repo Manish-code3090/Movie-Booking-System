@@ -1,4 +1,4 @@
-import api from './axios.js'
+import {api} from './axios.js'
 
 export const getTheatres = async ({ city } = {}) => {
   const { data } = await api.get('/theatres', { params: { city } })

@@ -1,4 +1,4 @@
-import api from './axios.js'
+import {api} from './axios.js'
 
 export const lockSeats = async ({ showId, seats }) => {
   const { data } = await api.post(`/shows/${showId}/lock`, { seats })
